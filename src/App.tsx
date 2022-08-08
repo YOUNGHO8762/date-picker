@@ -20,10 +20,11 @@ interface StayPeriod {
 type StayStatus = 'checkInOut' | 'staying' | 'notStaying';
 
 export default function Calendar() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date(currentDate));
   const [stayPeriod, setStayPeriod] = useState<StayPeriod>({
-    checkIn: new Date(),
-    checkOut: addDays(new Date(), 1),
+    checkIn: new Date(currentDate),
+    checkOut: addDays(new Date(currentDate), 1),
   });
 
   const daysInMonth = getDaysInMonth(selectedDate);
@@ -52,8 +53,8 @@ export default function Calendar() {
     setSelectedDate(movedDate);
   };
 
-  const CheckIsStayPeriod = (enteredDay: number): StayStatus => {
-    const enteredDate = new Date(selectedDate.setDate(enteredDay));
+  const CheckIsStayPeriod = (day: number): StayStatus => {
+    const enteredDate = new Date(selectedDate.setDate(day));
     const isCheckInOut =
       isEqual(stayPeriod.checkIn, enteredDate) ||
       isEqual(stayPeriod.checkOut, enteredDate);
